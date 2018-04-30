@@ -1,23 +1,33 @@
-package rukiasoft.com.weather
+package rukiasoft.com.weather.ui.weather
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.location.LocationManager
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-
+import com.rukiasoft.medication.ui.common.BaseActivity
 import kotlinx.android.synthetic.main.activity_weather.*
+import rukiasoft.com.weather.BuildConfig
+import rukiasoft.com.weather.R
 
-class WeatherActivity : AppCompatActivity() {
 
+class WeatherActivity : BaseActivity() {
+
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather)
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+            val lm = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val longitude = location.longitude
+            val latitude = location.latitude
+            Log.d("cretino", "lat: " + latitude.toString() + " long: " + longitude.toString() + " api_key: " + BuildConfig.API_KEY)
         }
     }
 
