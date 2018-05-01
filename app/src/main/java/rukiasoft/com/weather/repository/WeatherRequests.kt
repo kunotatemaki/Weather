@@ -13,6 +13,7 @@ import rukiasoft.com.weather.persistence.PersistenceManager
 import rukiasoft.com.weather.persistence.entities.Weather
 import rukiasoft.com.weather.persistence.utils.PersistenceUtils
 import rukiasoft.com.weather.utils.DateUtils
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,7 +36,7 @@ constructor(private val weatherServiceFactory: WeatherServiceFactory,
     //request info from user if the last request is more than 15 minutes old
     private val rateLimit: RateLimiter = RateLimiter(15, TimeUnit.MINUTES)
 
-    fun downloadWeatherInfo(lat: Double, lon: Double): LiveData<Resource<Weather?>> {
+    fun downloadWeatherInfo(lat: Double?, lon: Double?, foreceDownload: Boolean): LiveData<Resource<Weather?>> {
         val host: String = NetworkConstants.API_BASE_URL
 
         return object : NetworkBoundResource<Weather?, WeatherResponseFromServer>(appExecutors) {
@@ -50,7 +51,7 @@ constructor(private val weatherServiceFactory: WeatherServiceFactory,
             }
 
             override fun shouldFetch(data: Weather?): Boolean {
-                return data == null || rateLimit.shouldFetch(data.date.time)
+                return (foreceDownload || data == null || rateLimit.shouldFetch(data.date.time)) && lat != null && lon != null
             }
 
             override fun loadFromDb(): LiveData<Weather?> {

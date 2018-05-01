@@ -11,7 +11,7 @@ import java.util.*
 abstract class WeatherDao : BaseDao<Weather> {
 
 
-    @Query("SELECT * FROM weather WHERE date < :date")
+    @Query("SELECT * FROM weather WHERE date >= :date")
     protected abstract fun getLastPredictionInDateInternal(date: Date): LiveData<Weather?>
 
     fun getLastPredictionInDate(date: Date) = getLastPredictionInDateInternal(date).getDistinct()

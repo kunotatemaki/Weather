@@ -19,6 +19,16 @@ import java.io.File
 @Suppress("unused")
 class GlideBindingAdapters {
 
+    @BindingAdapter("imageUrl")
+    fun setImageUrl(view: ImageView, url: String?) {
+        //circle images
+        url?.let {
+            Glide.with(view.context)
+                    .load(url)
+                    .into(view)
+        }
+    }
+
     @BindingAdapter("imageRounded")
     fun setImageUrlRounded(view: ImageView, url: String?) {
         //circle images

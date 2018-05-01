@@ -12,7 +12,7 @@ class WeatherResponseFromServer constructor() {
 
     @Expose
     @SerializedName("weather")
-    var weather: WeatherItem? = null
+    var weather: List<WeatherItem>? = null
 
     @Expose
     @SerializedName("main")
@@ -69,7 +69,7 @@ class WeatherResponseFromServer constructor() {
 
         @Expose
         @SerializedName("deg")
-        var deg: Int? = null
+        var deg: Double? = null
     }
 
 

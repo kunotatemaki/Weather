@@ -4,6 +4,12 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
+import kotlinx.android.synthetic.main.content_weather.view.*
+import rukiasoft.com.weather.R
+import rukiasoft.com.weather.network.NetworkConstants
+import rukiasoft.com.weather.utils.DateUtils
+import rukiasoft.com.weather.utils.ResourcesManager
+import java.text.DecimalFormat
 import java.util.*
 
 /**
@@ -39,6 +45,35 @@ class Weather constructor(@PrimaryKey
                           var date: Date
 
 ) {
+
+    fun getTemp(): String{
+        mainTemp?.let{
+            val tempCelsius = (it - 273.15)
+            val formatted =  DecimalFormat("#.##").format(tempCelsius)
+            return "$formatted ºC"
+        }
+        return ""
+    }
+
+    fun getWind(): String{
+        windSpeed?.let{
+            return "$windSpeed m/s"
+        }
+        return ""
+    }
+
+    fun getIcon(): String{
+        weatherIcon?.let{
+            return NetworkConstants.API_BASE_URL_ICON.replace(NetworkConstants.ICON_TEMPLATE, it)
+        }
+        return ""
+    }
+
+    fun lastUpdated(resourcesManager: ResourcesManager):String{
+        val label = resourcesManager.getString(R.string.last_updated)
+        val date = DateUtils.getDateFormatted(this.date)
+        return "$label $date"
+    }
 
     fun compareTo(user: Weather): Boolean {
         return (id == user.id)
